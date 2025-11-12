@@ -6,3 +6,6 @@ router = APIRouter(prefix="", tags=["Consultas"])
 @router.get("/q1")
 def q1(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q1(limit)
 
+@router.get("/q2")
+def q2(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q2(limit)
+
