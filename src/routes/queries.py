@@ -9,6 +9,21 @@ def q1(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q1(limit)
 @router.get("/q2")
 def q2(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q2(limit)
 
+@router.get("/q6")
+def q6(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q6(limit)
+
+@router.get("/q7")
+def q7():  return mongo_q.q7()
+
+@router.get("/q8")
+def q8():  return mongo_q.q8()
+
+@router.get("/q9")
+def q9(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q9(limit)
+
+@router.get("/q10")
+def q10(limit: int = Query(100, ge=1, le=1000)):  return mongo_q.q10(limit)
+
 #NEO4J QUERIES
 
 @router.get("/q3")
@@ -25,3 +40,4 @@ def q11(): return neo_q.q11()
 
 @router.get("/q12")
 def q12(): return neo_q.q12()
+
