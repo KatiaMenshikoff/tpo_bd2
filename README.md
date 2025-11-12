@@ -1,15 +1,14 @@
-🐢 TP Aseguradoras
+## TP Aseguradoras
 
 TP Aseguradoras es un sistema backoffice que ejemplifica el uso de bases de datos NoSQL para la gestión de información de una compañía de seguros.
 El objetivo de este proyecto es implementar y comprender la persistencia poliglota utilizando MongoDB (como System of Record) y Neo4j (como grafo de relaciones), accedidas a través de una API REST desarrollada con FastAPI.
 
-⚙️ Prerequisitos
+##  Prerequisitos
 
 Para ejecutar el proyecto, necesitás tener instaladas las siguientes herramientas:
 
-Docker
-
-Docker Compose
+* Docker
+* Docker Compose
 (ya incluido en las versiones modernas de Docker para Windows y macOS; los usuarios de Linux deben instalarlo por separado).
 
 No es necesario un entorno virtual (.venv) local, ya que todo el entorno se ejecuta dentro de los contenedores Docker.
@@ -24,11 +23,12 @@ cd tpo_bd2
 
 Luego, copiá el archivo de variables de entorno de ejemplo:
 
+```bash
 cp .env.example .env
-
+```
 
 Asegurate de que las variables estén configuradas correctamente, por ejemplo:
-
+```bash
 # MongoDB
 MONGO_URI="mongodb://mongo:27017"
 MONGO_DB="aseguradora_tp"
@@ -37,12 +37,12 @@ MONGO_DB="aseguradora_tp"
 NEO4J_URI="bolt://neo4j:7687"
 NEO4J_USER="neo4j"
 NEO4J_PASSWORD="password"
-
+```
 
 Finalmente, levantá los contenedores con el siguiente comando:
-
+```bash
 docker compose up -d --build
-
+```
 
 Esto descargará las imágenes oficiales de MongoDB y Neo4j desde Docker Hub (si no las tenés localmente) e instanciará tres contenedores conectados en una red virtual interna:
 
@@ -55,14 +55,14 @@ tp_neo4j → Neo4j (base de datos de grafo)
 Toda esta configuración se ejecuta automáticamente.
 
 Para detener la aplicación pero mantener los datos:
-
+```bash
 docker compose down
-
+```
 
 Si querés detener la aplicación y eliminar los datos y volúmenes asociados:
-
+```bash
 docker compose down -v
-
+```
 
 Una vez levantada, la API estará disponible en
 👉 http://localhost:8000
@@ -75,7 +75,7 @@ FastAPI también genera una interfaz visual de documentación en Swagger.
 Acceso a Swagger UI:
 👉 http://localhost:8000/docs
 
-/clientes
+### `/clientes`
 GET /clientes
 
 Obtiene un listado de todos los clientes registrados.
@@ -83,8 +83,9 @@ Obtiene un listado de todos los clientes registrados.
 POST /clientes
 
 Crea un nuevo cliente en la base de datos.
-Ejemplo de cuerpo JSON:
 
+Ejemplo de cuerpo JSON:
+```json
 {
   "id_cliente": 1001,
   "nombre": "Juan",
@@ -92,6 +93,8 @@ Ejemplo de cuerpo JSON:
   "direccion": "Calle Falsa 123",
   "activo": true
 }
+```
+### `/clientes/{id}`
 
 PATCH /clientes/{id}
 
@@ -101,12 +104,12 @@ DELETE /clientes/{id}
 
 Elimina el cliente cuyo ID es el especificado.
 
-/polizas
+### `/polizas`
 POST /polizas
 
 Emite una nueva póliza, validando que el cliente y el agente existan y estén activos.
 Ejemplo:
-
+```json
 {
   "nro_poliza": "P-105",
   "id_cliente": 3,
@@ -118,13 +121,13 @@ Ejemplo:
   "cobertura_total": 1000000,
   "estado": "Activa"
 }
-
-/siniestros
+```
+### `/siniestros`
 POST /siniestros
 
 Reporta un nuevo siniestro asociado a una póliza existente.
 Ejemplo:
-
+```json
 {
   "id_siniestro": 501,
   "nro_poliza": "P-105",
@@ -134,7 +137,7 @@ Ejemplo:
   "monto_estimado": 20000,
   "estado": "Abierto"
 }
-
+```
 Consultas (Q1–Q12)
 
 Las consultas predefinidas del sistema permiten explorar información combinada entre MongoDB y Neo4j.
@@ -170,14 +173,6 @@ tpo_bd2/
 │  ├─ services/            # lógica de negocio (ABM, validaciones)
 │  ├─ queries/             # consultas Mongo y Neo4j
 │  └─ sync/                # scripts de carga y sincronización
-
-🧩 Observaciones finales
-
-Este proyecto fue desarrollado con fines académicos en el marco de la materia Bases de Datos II (ITBA, 2025).
-
-Implementa una arquitectura políglota (MongoDB + Neo4j) para explorar distintos enfoques de persistencia.
-
-El código fue desarrollado en Python 3.11, utilizando FastAPI como framework principal.
 
 👨‍💻 Autores
 
