@@ -2,7 +2,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from src.db.mongo import db
 
-def q1(limit: int = 100):
+def q1(limit: int = 100, start: int = 0):
     pipeline = [
         {"$match": {"activo": {"$in": [True, "True", "true"]}}},
         {"$lookup": {
@@ -17,11 +17,12 @@ def q1(limit: int = 100):
             "as": "polizas_vigentes"
         }},
         {"$project": {"_id": 0, "id_cliente":1, "nombre":1, "apellido":1, "polizas_vigentes":1}},
+        {"$skip": start},
         {"$limit": limit}
     ]
     return list(db().clientes.aggregate(pipeline))
 
-def q2(limit: int = 100):
+def q2(limit: int = 100, start: int = 0):
     pipeline = [
         {"$match": {"estado": "Abierto"}},
         {"$lookup": {"from":"polizas","localField":"nro_poliza","foreignField":"nro_poliza","as":"pol"}},
@@ -30,17 +31,19 @@ def q2(limit: int = 100):
         {"$unwind": "$cli"},
         {"$project":{"_id":0,"id_siniestro":1,"tipo":1,"monto_estimado":1,
                      "cliente":{"id":"$cli.id_cliente","nombre":"$cli.nombre","apellido":"$cli.apellido"}}},
+        {"$skip": start},
         {"$limit": limit}
     ]
     return list(db().siniestros.aggregate(pipeline))
 
-def q6(limit: int = 100):
+def q6(limit: int = 100, start: int = 0):
     pipeline = [
         {"$match": {"estado": "Vencida"}},
         {"$lookup": {"from":"clientes","localField":"id_cliente","foreignField":"id_cliente","as":"cli"}},
         {"$unwind": "$cli"},
         {"$project":{"_id":0,"nro_poliza":1,"estado":1,
                      "cliente":{"id":"$cli.id_cliente","nombre":"$cli.nombre","apellido":"$cli.apellido"}}},
+        {"$skip": start},
         {"$limit": limit}
     ]
     return list(db().polizas.aggregate(pipeline))
@@ -67,22 +70,24 @@ def q8():
     ]
     return list(db().siniestros.aggregate(pipeline))
 
-def q9(limit: int = 100):
+def q9(limit: int = 100, start: int = 0):
     pipeline = [
         {"$match":{"estado":"Activa"}},
         {"$addFields":{"fi":{"$dateFromString":{"dateString":"$fecha_inicio","format":"%d/%m/%Y"}}}},
         {"$sort":{"fi":1}},
         {"$project":{"_id":0,"nro_poliza":1,"fecha_inicio":"$fi"}},
+        {"$skip": start},
         {"$limit": limit}
     ]
     return list(db().polizas.aggregate(pipeline))
 
-def q10(limit: int = 100):
+def q10(limit: int = 100, start: int = 0):
     pipeline = [
         {"$match":{"estado":"Suspendida"}},
         {"$lookup":{"from":"clientes","localField":"id_cliente","foreignField":"id_cliente","as":"cli"}},
         {"$unwind":"$cli"},
         {"$project":{"_id":0,"nro_poliza":1,"estado_poliza":"$estado","cliente_activo":"$cli.activo"}},
+        {"$skip": start},
         {"$limit": limit}
     ]
     return list(db().polizas.aggregate(pipeline))
