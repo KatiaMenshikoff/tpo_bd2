@@ -1,0 +1,67 @@
+
+# --- Entornos virtuales ---
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# --- Archivos Python compilados ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Archivos temporales / cache ---
+*.log
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+*.sqlite3
+
+# --- Configuración de IDEs ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Archivos de sistema ---
+Thumbs.db
+.DS_Store
+
+# --- Data ---
+# Ignora todo lo que esté dentro de data/
+data/*
+
+# ... excepto los CSV base de datasets originales
+!data/*.csv
+
+# --- Docker / contenedores ---
+# Archivos generados o volátiles de Docker
+*.pid
+*.seed
+docker/*.pid
+docker/*.log
+
+# Volúmenes o backups locales
+mongo-data/
+neo4j-data/
+neo4j-logs/
+volumes/
+.docker/
+*.tar
+*.gz
+
+# --- Otros ---
+# Archivos de pruebas / coverage
+.coverage
+htmlcov/
+pytest_cache/
+
+# --- Archivos temporales de Jupyter ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- Archivos de sistema de Mac ---
+.DS_Store
+.AppleDouble
+.LSOverride
