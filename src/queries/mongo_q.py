@@ -4,19 +4,39 @@ from src.db.mongo import db
 
 def q1(limit: int = 100, start: int = 0):
     pipeline = [
-        {"$match": {"activo": {"$in": [True, "True", "true"]}}},
+        {"$match": {"activo": {"$in": [True, "True", "true", "TRUE", 1]}}},
         {"$lookup": {
             "from": "polizas",
             "let": {"cid": "$id_cliente"},
             "pipeline": [
-                {"$match": {"$expr": {"$and": [
-                    {"$eq": ["$id_cliente", "$$cid"]},
-                    {"$eq": ["$estado", "Activa"]}
-                ]}}}
+                {"$match": {
+                    "$expr": {
+                        "$and": [
+                            {"$eq": [
+                                {"$toInt": "$id_cliente"},
+                                {"$toInt": "$$cid"}
+                            ]},
+                            {"$regexMatch": {
+                                "input": "$estado",
+                                "regex": "^activa$",
+                                "options": "i"
+                            }}
+                        ]
+                    }
+                }}
             ],
             "as": "polizas_vigentes"
         }},
-        {"$project": {"_id": 0, "id_cliente":1, "nombre":1, "apellido":1, "polizas_vigentes":1}},
+        {"$addFields": {"cant_polizas_vigentes": {"$size": "$polizas_vigentes"}}},
+        {"$match": {"cant_polizas_vigentes": {"$gt": 0}}},
+        {"$project": {
+            "_id": 0,
+            "id_cliente": 1, "nombre": 1, "apellido": 1,
+            "cant_polizas_vigentes": 1,
+            "polizas_vigentes.nro_poliza": 1,
+            "polizas_vigentes.tipo": 1
+        }},
+        {"$sort": {"id_cliente": 1}},
         {"$skip": start},
         {"$limit": limit}
     ]
