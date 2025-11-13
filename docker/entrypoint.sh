@@ -46,10 +46,6 @@ echo "[entrypoint] Creando índices/constraints..."
 python src/create_indexes.py
 python src/neo4j_setup.py
 
-# Sync Mongo -> Neo4j
-echo "[entrypoint] Sincronizando Mongo -> Neo4j..."
-python src/sync/mongo_to_neo.py || true
-
 # Iniciar API FastAPI (Uvicorn)
 echo "[entrypoint] Iniciando API en :8000 ..."
 exec uvicorn src.api:app --host 0.0.0.0 --port 8000
