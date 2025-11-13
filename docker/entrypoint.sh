@@ -46,18 +46,6 @@ echo "[entrypoint] Creando índices/constraints..."
 python src/create_indexes.py
 python src/neo4j_setup.py
 
-# Importación CSV (opcional)
-if [[ "${DO_IMPORT:-1}" == "1" ]]; then
-  echo "[entrypoint] Importando CSV -> Mongo..."
-  if [[ "${DO_DROP:-0}" == "1" ]]; then
-    python src/import_data.py --drop
-  else
-    python src/import_data.py
-  fi
-else
-  echo "[entrypoint] Salteando importación CSV (DO_IMPORT=0)"
-fi
-
 # Sync Mongo -> Neo4j
 echo "[entrypoint] Sincronizando Mongo -> Neo4j..."
 python src/sync/mongo_to_neo.py || true

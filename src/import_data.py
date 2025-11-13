@@ -49,11 +49,16 @@ def cast(coll, docs):
     return docs
 
 def main():
-    drop = len(sys.argv)>1 and sys.argv[1]=="--drop"
     client = MongoClient(MONGO_URI)
     db = client[MONGO_DB]
-    if drop:
-        print("Dropping colecciones...")
+    # Campos únicos para cada colección (usados como filtro en upsert)
+    UNIQUE_FIELDS = {
+        "clientes": "id_cliente",
+        "agentes": "id_agente",
+        "polizas": "nro_poliza",
+        "siniestros": "id_siniestro",
+        "vehiculos": "id_vehiculo",
+    }
     total=0
     for coll, fname in FILES.items():
         path = os.path.normpath(os.path.join(DATA_DIR, fname))
@@ -61,9 +66,12 @@ def main():
             print(f"WARN: {path} no existe, salto {coll}")
             continue
         docs = cast(coll, load_csv(path))
-        if drop: db[coll].drop()
-        if docs: db[coll].insert_many(docs)
-        print(f"{coll}: {len(docs)} registros insertados")
+        if docs:
+            unique_field = UNIQUE_FIELDS[coll]
+            for doc in docs:
+                filter_dict = {unique_field: doc[unique_field]}
+                db[coll].update_one(filter_dict, {"$set": doc}, upsert=True)
+        print(f"{coll}: {len(docs)} registros procesados (insertados/actualizados)")
         total += len(docs)
     print(f"OK total: {total}")
 
