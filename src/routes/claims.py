@@ -6,6 +6,9 @@ router = APIRouter(prefix="/siniestros", tags=["Siniestros"])
 
 @router.post("")
 def alta_siniestro(siniestro: SiniestroIn):
+    """
+    Crea un nuevo siniestro.
+    """
     try:
         return claims.create_claim(siniestro.dict())
     except Exception as e:

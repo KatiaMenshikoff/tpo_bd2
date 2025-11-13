@@ -6,10 +6,16 @@ router = APIRouter(prefix="/clientes", tags=["Clientes"])
 
 @router.get("")
 def list_clientes():
+    """
+    Obtiene un listado de todos los clientes registrados.
+    """
     return customers.list_clients()
 
 @router.post("")
 def crear_cliente(cliente: ClienteIn):
+    """
+    Crea un nuevo cliente.
+    """
     try:
         return customers.create_client(cliente.dict())
     except Exception as e:
@@ -17,6 +23,9 @@ def crear_cliente(cliente: ClienteIn):
 
 @router.patch("/{id_cliente}")
 def actualizar_cliente(id_cliente: int, patch: ClientePatch):
+    """
+    Actualiza parcialmente los datos de un cliente.
+    """
     try:
         body = {k: v for k, v in patch.dict().items() if v is not None}
         return customers.update_client(id_cliente, body)
@@ -25,6 +34,9 @@ def actualizar_cliente(id_cliente: int, patch: ClientePatch):
 
 @router.delete("/{id_cliente}")
 def borrar_cliente(id_cliente: int):
+    """
+    Elimina un cliente.
+    """
     try:
         return customers.delete_client(id_cliente)
     except Exception as e:
