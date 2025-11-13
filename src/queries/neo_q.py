@@ -29,14 +29,14 @@ def q11():
         "MATCH (c:Cliente)<-[:DE]-(v:Vehiculo {asegurado:true})\n"
         "WITH c, COUNT(v) AS n\n"
         "WHERE n > 1\n"
-        "RETURN c.id AS id_cliente, n"
+        "RETURN c.id AS id_cliente, c.nombre AS nombre, c.apellido AS apellido, n"
     )
     return run(q)
 
 def q12():
     q = (
         "MATCH (a:Agente)-[:ASIGNADO_A]->(:Poliza)-[:TIENE_SINIESTRO]->(s:Siniestro)\n"
-        "RETURN a.id AS id_agente, COUNT(s) AS siniestros\n"
+        "RETURN a.id AS id_agente, a.nombre AS nombre, a.apellido AS apellido, COUNT(s) AS siniestros\n"
         "ORDER BY siniestros DESC"
     )
     return run(q)
