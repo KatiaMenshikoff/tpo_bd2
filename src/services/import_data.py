@@ -61,7 +61,6 @@ def import_data() -> Dict[str, Any]:
     Importa datos desde archivos CSV a MongoDB usando upsert.
     Retorna un diccionario con el resultado de la importación.
     """
-    # Campos únicos para cada colección (usados como filtro en upsert)
     UNIQUE_FIELDS = {
         "clientes": "id_cliente",
         "agentes": "id_agente",

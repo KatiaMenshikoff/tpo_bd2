@@ -51,7 +51,6 @@ def cast(coll, docs):
 def main():
     client = MongoClient(MONGO_URI)
     db = client[MONGO_DB]
-    # Campos únicos para cada colección (usados como filtro en upsert)
     UNIQUE_FIELDS = {
         "clientes": "id_cliente",
         "agentes": "id_agente",

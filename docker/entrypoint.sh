@@ -3,7 +3,6 @@ set -euo pipefail
 
 echo "[entrypoint] Esperando a Mongo y Neo4j..."
 
-# wait for Mongo
 python - <<'PY'
 import os, time
 from pymongo import MongoClient, errors
@@ -20,7 +19,6 @@ while True:
         time.sleep(2)
 PY
 
-# wait for Neo4j
 python - <<'PY'
 import os, time
 from neo4j import GraphDatabase
@@ -41,14 +39,11 @@ while True:
         time.sleep(2)
 PY
 
-# Crear índices en Mongo y constraints en Neo4j (vía Python)
 echo "[entrypoint] Creando índices/constraints..."
 python src/create_indexes.py
 python src/neo4j_setup.py
 
-# Iniciar API FastAPI (Uvicorn)
 echo "[entrypoint] Iniciando API en :8000 ..."
 exec uvicorn src.api:app --host 0.0.0.0 --port 8000
 
-# Mantener el contenedor vivo si no hay API
 tail -f /dev/null
