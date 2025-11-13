@@ -1,17 +1,42 @@
 from fastapi import APIRouter, HTTPException
 from src.services import import_data as import_data_service
+from src.services import mongo_to_neo as sync_service
 
 router = APIRouter(prefix="/import", tags=["Importación"])
 
 @router.post("/data")
 def importar_datos():
     """
-    Importa datos desde archivos CSV a MongoDB.
-    Usa upsert para actualizar existentes e insertar nuevos.
+    Importa datos desde archivos CSV a MongoDB. Usa upsert para actualizar existentes e insertar nuevos.
+    Los archivos CSV a importar deben estar en el directorio data/ del proyecto.
+    Se puede importar datos para clientes, agentes, polizas, siniestros y vehiculos.
+    Los archivos CSV deben tener los siguientes campos para cada colección:
+    - clientes: id_cliente, nombre, apellido, dni, email, telefono, direccion, ciudad, provincia, activo
+    - agentes: id_agente, nombre, apellido, matricula, telefono, email, zona, activo
+    - polizas: nro_poliza, id_cliente, id_agente, prima_mensual, cobertura_total
+    - siniestros: id_siniestro, tipo, fecha, estado, nro_poliza
+    - vehiculos: id_vehiculo, id_cliente, anio, asegurado
     """
     try:
         result = import_data_service.import_data()
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en importación: {str(e)}")
+
+@router.post("/sync")
+def sincronizar_mongo_a_neo():
+    """
+    Sincroniza datos desde MongoDB a Neo4j.
+    Crea nodos para clientes, agentes, polizas, siniestros y vehiculos,
+    y establece las relaciones entre ellos en Neo4j.
+    """
+    try:
+        result = sync_service.sync_mongo_to_neo()
+        if not result.get("ok", False):
+            raise HTTPException(status_code=500, detail=result.get("error", "Error desconocido en sincronización"))
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en sincronización: {str(e)}")
 
