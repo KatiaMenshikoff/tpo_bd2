@@ -4,7 +4,7 @@ from src.db.neo import run
 def q3():
     q = (
         "MATCH (v:Vehiculo {asegurado:true})-[:DE]->(c:Cliente)-[:TIENE]->(p:Poliza {estado:'Activa'})\n"
-        "RETURN v.id AS id_vehiculo, v.marca AS marca, v.modelo AS modelo, c.id AS id_cliente, p.nro AS nro_poliza"
+        "RETURN v.id AS id_vehiculo, v.marca AS marca, v.modelo AS modelo, c.id AS id_cliente, c.nombre AS nombre, c.apellido AS apellido, p.nro AS nro_poliza"
     )
     return run(q)
 
