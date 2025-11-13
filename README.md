@@ -155,25 +155,6 @@ Ejemplo de uso:
 
 curl "http://localhost:8000/q7"
 
-📦 Estructura del proyecto
-tpo_bd2/
-├─ docker-compose.yml
-├─ Dockerfile
-├─ .env.example
-├─ data/                   # CSV con datasets base
-│  ├─ clientes.csv
-│  ├─ agentes.csv
-│  ├─ polizas.csv
-│  ├─ siniestros.csv
-│  └─ vehiculos.csv
-├─ src/
-│  ├─ api.py               # arranque principal de FastAPI
-│  ├─ schemas/             # modelos Pydantic
-│  ├─ routes/              # endpoints (clientes, pólizas, etc.)
-│  ├─ services/            # lógica de negocio (ABM, validaciones)
-│  ├─ queries/             # consultas Mongo y Neo4j
-│  └─ sync/                # scripts de carga y sincronización
-
 👨‍💻 Autores
 
 Trabajo realizado por: Grupo 1
