@@ -9,7 +9,8 @@ def importar_datos():
     """
     Importa datos desde archivos CSV a MongoDB. Usa upsert para actualizar existentes e insertar nuevos.
     Luego sincroniza los datos desde MongoDB a Neo4j.
-    Los archivos CSV a importar deben estar en el directorio data/ del proyecto.
+    Los archivos CSV a importar deben estar en el directorio src/data/ del proyecto.
+    Si este directorio no existe, por favor crearlo y colocar los archivos CSV dentro de él.
     Se puede importar datos para clientes, agentes, polizas, siniestros y vehiculos.
     Los archivos CSV deben tener los siguientes campos para cada colección:
     - clientes: id_cliente, nombre, apellido, dni, email, telefono, direccion, ciudad, provincia, activo
