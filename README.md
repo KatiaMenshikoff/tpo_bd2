@@ -38,6 +38,7 @@ NEO4J_URI="bolt://neo4j:7687"
 NEO4J_USER="neo4j"
 NEO4J_PASSWORD="password"
 ```
+Si se ejecuta por primera vez el proyecto, o se tiene una cantidad masiva de datos a insertar a la DB, se puede importar en bulk datos desde archivos CSV. Para eso, debe ubicarse los csv a importar en el directorio src/data del proyecto. Si este no existe, por favor crearlo y copiar los archivos allí. Luego, desde la interfaz gráfica disponible en localhost:8000/docs, ejecutamos el llamado al endpoint en import/data “Importar datos”. Veamos los requerimientos de dicho endpoint:
 
 Finalmente, levantá los contenedores con el siguiente comando:
 ```bash
